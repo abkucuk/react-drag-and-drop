@@ -2,17 +2,23 @@ import React, { Component } from 'react';
 import List from './List';
 import { connect } from "react-redux";
 import AddNewItem from './AddNewItem';
+import {DragDropContext} from 'react-beautiful-dnd';
 class App extends Component {
+  whenDragEnd = (result) => {
+    const {destination, source, draggableId} = result;
+  }
   render() {
     const { lists } = this.props;
     return (
-      <div style={styles.container}>
-        <h2>Başlık</h2>
-        <div style={styles.listContainer}>
-          {lists.map(item => <List title={item.title} cards={item.cards} />)}
-          <AddNewItem />
+      <DragDropContext onDragEnd={this.whenDragEnd}>
+        <div style={styles.container}>
+          <h2>Trello clone with ReactJS</h2>
+          <div style={styles.listContainer}>
+            {lists.map(item => <List listID={item.id} key={item.id} title={item.title} cards={item.cards} />)}
+            <AddNewItem list/>
+          </div>
         </div>
-      </div>
+      </DragDropContext>
     );
   }
 }
@@ -22,7 +28,9 @@ const styles = {
     flexDirection: 'row',
   },
   container : {
-    backgroundColor:'#df4500'
+    borderRadius: 5,
+    backgroundColor:'#df4500',
+    padding: 20,
   }
 };
 
